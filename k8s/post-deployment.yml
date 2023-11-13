@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-deployment
+  labels:
+    app: posts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      name: posts-pod
+      labels:
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: davechedjoun/posts
+          ports:
+            - containerPort : 4000
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: posts
+  ports:
+    - port: 4000
+      targetPort: 4000
